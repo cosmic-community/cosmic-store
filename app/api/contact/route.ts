@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createContactSubmission } from '@/lib/cosmic'
+import { sendContactEmail } from '@/lib/resend'
 
 export async function POST(request: NextRequest) {
   try {
@@ -30,6 +31,20 @@ export async function POST(request: NextRequest) {
       subject,
       message,
     })
+
+    // Send email notification via Resend
+    try {
+      await sendContactEmail({
+        name,
+        email,
+        subject,
+        message,
+      })
+    } catch (emailError) {
+      console.error('Failed to send email notification:', emailError)
+      // Continue with success response since the submission was saved
+      // The email failure shouldn't prevent the form submission from being recorded
+    }
 
     return NextResponse.json(
       { message: 'Contact submission created successfully' },

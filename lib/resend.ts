@@ -22,7 +22,7 @@ export async function sendContactEmail(data: ContactEmailData): Promise<void> {
   try {
     const resend = getResendClient()
     
-    await resend.emails.send({
+    const result = await resend.emails.send({
       from: 'support@cosmicjs.com',
       to: 'tony@cosmicjs.com',
       subject: `Contact Form: ${data.subject}`,
@@ -45,8 +45,28 @@ export async function sendContactEmail(data: ContactEmailData): Promise<void> {
             <p style="margin: 0;">This email was sent from the Cosmic Store contact form.</p>
           </div>
         </div>
+      `,
+      // Also send a plain text version for better compatibility
+      text: `
+New Contact Form Submission
+
+Name: ${data.name}
+Email: ${data.email}
+Subject: ${data.subject}
+
+Message:
+${data.message}
+
+This email was sent from the Cosmic Store contact form.
       `
     })
+
+    if (result.error) {
+      console.error('Resend API error:', result.error)
+      throw new Error(`Resend API error: ${result.error.message}`)
+    }
+
+    console.log('Email sent successfully:', result.data?.id)
   } catch (error) {
     console.error('Failed to send contact email:', error)
     throw new Error('Failed to send email notification')
