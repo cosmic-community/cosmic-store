@@ -4,6 +4,7 @@ import { Product, Collection, Review } from './types'
 const cosmic = createBucketClient({
   bucketSlug: process.env.COSMIC_BUCKET_SLUG || '',
   readKey: process.env.COSMIC_READ_KEY || '',
+  apiEnvironment: "staging",
 })
 
 export async function getAllProducts(): Promise<Product[]> {
