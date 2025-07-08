@@ -35,8 +35,17 @@ export async function POST(request: NextRequest) {
     // Save to Cosmic CMS
     const submission = await createContactSubmission(formData)
 
-    // Send email notification
-    await sendContactEmail(formData)
+    // Send email notification (only if Resend is configured)
+    try {
+      if (process.env.RESEND_API_KEY) {
+        await sendContactEmail(formData)
+      } else {
+        console.warn('RESEND_API_KEY not configured - email notification skipped')
+      }
+    } catch (emailError) {
+      console.error('Email sending failed:', emailError)
+      // Don't fail the entire request if email fails
+    }
 
     return NextResponse.json(
       { 

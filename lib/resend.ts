@@ -1,7 +1,5 @@
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-
 export interface ContactEmailData {
   name: string
   email: string
@@ -9,8 +7,21 @@ export interface ContactEmailData {
   message: string
 }
 
+// Initialize Resend only when needed to avoid build-time issues
+function getResendClient(): Resend {
+  const apiKey = process.env.RESEND_API_KEY
+  
+  if (!apiKey) {
+    throw new Error('RESEND_API_KEY environment variable is required')
+  }
+  
+  return new Resend(apiKey)
+}
+
 export async function sendContactEmail(data: ContactEmailData): Promise<void> {
   try {
+    const resend = getResendClient()
+    
     await resend.emails.send({
       from: 'support@cosmicjs.com',
       to: 'tony@cosmicjs.com',
