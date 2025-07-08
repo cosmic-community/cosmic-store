@@ -1,9 +1,16 @@
 import { createBucketClient } from '@cosmicjs/sdk'
-import { Product, Collection, Review } from './types'
+import { Product, Collection, Review, ContactPage, ContactSubmission, ContactFormData } from './types'
 
 const cosmic = createBucketClient({
   bucketSlug: process.env.COSMIC_BUCKET_SLUG || '',
   readKey: process.env.COSMIC_READ_KEY || '',
+  apiEnvironment: "staging",
+})
+
+const cosmicWrite = createBucketClient({
+  bucketSlug: process.env.COSMIC_BUCKET_SLUG || '',
+  readKey: process.env.COSMIC_READ_KEY || '',
+  writeKey: process.env.COSMIC_WRITE_KEY || '',
   apiEnvironment: "staging",
 })
 
@@ -107,4 +114,39 @@ export async function getReviewsByProduct(productId: string): Promise<Review[]> 
     }
     throw error
   }
+}
+
+export async function getContactPage(): Promise<ContactPage | null> {
+  try {
+    const response = await cosmic.objects
+      .findOne({ type: 'contact-pages' })
+      .props(['id', 'title', 'slug', 'metadata'])
+      .depth(1)
+    
+    return response.object
+  } catch (error) {
+    if (error && typeof error === 'object' && 'status' in error && error.status === 404) {
+      return null
+    }
+    throw error
+  }
+}
+
+export async function createContactSubmission(data: ContactFormData): Promise<ContactSubmission> {
+  const submissionData = {
+    title: `Contact from ${data.name}`,
+    type: 'contact-submissions',
+    status: 'published',
+    metadata: {
+      name: data.name,
+      email: data.email,
+      subject: data.subject,
+      message: data.message,
+      submission_date: new Date().toISOString(),
+      status: 'New'
+    }
+  }
+
+  const response = await cosmicWrite.objects.insertOne(submissionData)
+  return response.object
 }

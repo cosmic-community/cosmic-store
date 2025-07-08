@@ -21,6 +21,9 @@ export default function Header() {
             <Link href="/collections" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
               Collections
             </Link>
+            <Link href="/contact" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+              Contact
+            </Link>
           </nav>
           
           <div className="flex items-center space-x-4">

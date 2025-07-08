@@ -53,3 +53,38 @@ export interface Review {
     review_date: string
   }
 }
+
+export interface ContactPage {
+  id: string
+  title: string
+  slug: string
+  metadata: {
+    page_title: string
+    page_description: string
+    contact_info: string
+    form_title: string
+    form_description: string
+    success_message: string
+  }
+}
+
+export interface ContactSubmission {
+  id: string
+  title: string
+  slug: string
+  metadata: {
+    name: string
+    email: string
+    subject: string
+    message: string
+    submission_date: string
+    status: string
+  }
+}
+
+export interface ContactFormData {
+  name: string
+  email: string
+  subject: string
+  message: string
+}
