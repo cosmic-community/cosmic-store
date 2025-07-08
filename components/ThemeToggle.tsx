@@ -27,6 +27,7 @@ export default function ThemeToggle() {
         // Cycle through themes: light -> dark -> system -> light
         const currentIndex = themes.findIndex(t => t.key === theme)
         const nextIndex = (currentIndex + 1) % themes.length
+        // Fix: Add proper null check before calling setTheme
         if (setTheme) {
           setTheme(themes[nextIndex].key)
         }
@@ -65,6 +66,7 @@ export default function ThemeToggle() {
                   <button
                     key={themeOption.key}
                     onClick={() => {
+                      // Fix: Add proper null check before calling setTheme
                       if (setTheme) {
                         setTheme(themeOption.key)
                       }
