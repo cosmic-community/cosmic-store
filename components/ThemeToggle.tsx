@@ -2,7 +2,7 @@
 
 import { useTheme } from '@/hooks/useTheme'
 import { Sun, Moon, Monitor } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 export default function ThemeToggle() {
   const { theme, setTheme } = useTheme()
@@ -17,12 +17,31 @@ export default function ThemeToggle() {
   const currentTheme = themes.find(t => t.key === theme) || themes[2]
   const Icon = currentTheme.icon
 
+  // Add keyboard shortcut for theme toggle
+  useEffect(() => {
+    const handleKeydown = (event: KeyboardEvent) => {
+      // Check for Cmd+/ (Mac) or Ctrl+/ (Windows/Linux)
+      if (event.key === '/' && (event.metaKey || event.ctrlKey)) {
+        event.preventDefault()
+        
+        // Cycle through themes: light -> dark -> system -> light
+        const currentIndex = themes.findIndex(t => t.key === theme)
+        const nextIndex = (currentIndex + 1) % themes.length
+        setTheme(themes[nextIndex].key)
+      }
+    }
+
+    document.addEventListener('keydown', handleKeydown)
+    return () => document.removeEventListener('keydown', handleKeydown)
+  }, [theme, setTheme])
+
   return (
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="p-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
         aria-label="Toggle theme"
+        title="Toggle theme (Cmd+/)"
       >
         <Icon className="w-5 h-5" />
       </button>
