@@ -25,7 +25,7 @@ export default function ProductGallery({
   return (
     <div className="space-y-4">
       {/* Main Image */}
-      <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
+      <div className="aspect-square bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden">
         <img
           src={currentImageUrl}
           alt={productName}
@@ -41,7 +41,9 @@ export default function ProductGallery({
               key={index}
               onClick={() => setCurrentImage(index)}
               className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 ${
-                currentImage === index ? 'border-blue-500' : 'border-gray-200'
+                currentImage === index 
+                  ? 'border-blue-500 dark:border-blue-400' 
+                  : 'border-gray-200 dark:border-gray-700'
               }`}
             >
               <img

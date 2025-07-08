@@ -11,7 +11,7 @@ export default function CollectionCard({ collection }: CollectionCardProps) {
     : '/placeholder-collection.jpg'
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
       <Link href={`/collections/${collection.slug}`}>
         <div className="aspect-w-3 aspect-h-2">
           <img
@@ -21,10 +21,10 @@ export default function CollectionCard({ collection }: CollectionCardProps) {
           />
         </div>
         <div className="p-6">
-          <h3 className="font-semibold text-xl text-gray-900 mb-2">
+          <h3 className="font-semibold text-xl text-gray-900 dark:text-white mb-2">
             {collection.metadata.name}
           </h3>
-          <p className="text-gray-700 font-medium">
+          <p className="text-gray-700 dark:text-gray-300 font-medium">
             {collection.metadata.description}
           </p>
         </div>
