@@ -24,7 +24,7 @@ export default function CollectionCard({ collection }: CollectionCardProps) {
           <h3 className="font-semibold text-xl text-gray-900 mb-2">
             {collection.metadata.name}
           </h3>
-          <p className="text-gray-600">
+          <p className="text-gray-700 font-medium">
             {collection.metadata.description}
           </p>
         </div>

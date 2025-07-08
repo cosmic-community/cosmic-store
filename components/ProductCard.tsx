@@ -24,14 +24,14 @@ export default function ProductCard({ product }: ProductCardProps) {
           <h3 className="font-semibold text-lg text-gray-900 mb-2">
             {product.metadata.name}
           </h3>
-          <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+          <p className="text-gray-700 text-sm mb-3 line-clamp-2 font-medium">
             {product.metadata.description?.replace(/<[^>]*>/g, '') || ''}
           </p>
           <div className="flex justify-between items-center">
             <span className="text-xl font-bold text-blue-600">
               ${product.metadata.price}
             </span>
-            <span className={`text-xs px-2 py-1 rounded-full ${
+            <span className={`text-xs px-2 py-1 rounded-full font-medium ${
               product.metadata.in_stock 
                 ? 'bg-green-100 text-green-800' 
                 : 'bg-red-100 text-red-800'

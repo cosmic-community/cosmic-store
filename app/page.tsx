@@ -20,7 +20,7 @@ export default async function HomePage() {
         <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
           Welcome to Cosmic Store
         </h1>
-        <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+        <p className="text-lg text-gray-800 dark:text-gray-200 max-w-2xl mx-auto font-medium">
           Discover premium products curated just for you. Shop our featured collections and find exactly what you're looking for.
         </p>
       </section>
