@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { Product } from '@/lib/types'
+import AddToCartButton from './AddToCartButton'
 
 interface ProductCardProps {
   product: Product
@@ -27,7 +28,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           <p className="text-gray-700 dark:text-gray-300 text-sm mb-3 line-clamp-2 font-medium">
             {product.metadata.description?.replace(/<[^>]*>/g, '') || ''}
           </p>
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center mb-3">
             <span className="text-xl font-bold text-blue-600 dark:text-blue-400">
               ${product.metadata.price}
             </span>
@@ -41,6 +42,10 @@ export default function ProductCard({ product }: ProductCardProps) {
           </div>
         </div>
       </Link>
+      
+      <div className="px-4 pb-4">
+        <AddToCartButton product={product} className="w-full" />
+      </div>
     </div>
   )
 }

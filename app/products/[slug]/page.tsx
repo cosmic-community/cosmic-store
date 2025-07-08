@@ -2,6 +2,7 @@
 import { getProductBySlug, getReviewsByProduct } from '@/lib/cosmic'
 import ProductGallery from '@/components/ProductGallery'
 import ReviewCard from '@/components/ReviewCard'
+import AddToCartButton from '@/components/AddToCartButton'
 import { Product, Review } from '@/lib/types'
 import { notFound } from 'next/navigation'
 
@@ -61,12 +62,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             </p>
           </div>
 
-          <button 
-            className="btn-primary w-full mb-4"
-            disabled={!product.metadata.in_stock}
-          >
-            {product.metadata.in_stock ? 'Add to Cart' : 'Out of Stock'}
-          </button>
+          <AddToCartButton product={product} className="w-full mb-4" />
 
           {product.metadata.collections && product.metadata.collections.length > 0 && (
             <div className="mb-6">

@@ -4,12 +4,14 @@ import './globals.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { ThemeProvider } from '@/contexts/ThemeContext'
+import { CartProvider } from '@/contexts/CartContext'
+import CartDrawer from '@/components/CartDrawer'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Cosmic Store - Premium E-commerce',
-  description: 'Discover amazing products with our premium e-commerce store powered by Cosmic CMS',
+  title: 'Cosmic Store - Modern E-commerce',
+  description: 'A modern e-commerce store powered by Cosmic CMS',
 }
 
 export default function RootLayout({
@@ -21,13 +23,16 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <ThemeProvider>
-          <div className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white min-h-screen">
-            <Header />
-            <main className="min-h-screen">
-              {children}
-            </main>
-            <Footer />
-          </div>
+          <CartProvider>
+            <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+              <Header />
+              <main className="flex-1">
+                {children}
+              </main>
+              <Footer />
+              <CartDrawer />
+            </div>
+          </CartProvider>
         </ThemeProvider>
       </body>
     </html>
