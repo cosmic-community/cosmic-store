@@ -1,28 +1,23 @@
-export interface CosmicFile {
-  url: string
-  imgix_url: string
-}
-
-export interface RatingOption {
-  key: string
-  value: string
-}
-
 export interface Product {
   id: string
   title: string
   slug: string
   metadata: {
-    name: string
     description: string
     price: number
-    sku: string
-    inventory_count: number
-    featured_image: CosmicFile
-    product_gallery: CosmicFile[]
-    collections: Collection[]
+    images: Array<{
+      imgix_url: string
+      name: string
+    }>
+    category: string
     in_stock: boolean
-    featured_product: boolean
+    sku: string
+    weight?: number
+    dimensions?: {
+      length: number
+      width: number
+      height: number
+    }
   }
 }
 
@@ -31,27 +26,28 @@ export interface Collection {
   title: string
   slug: string
   metadata: {
-    name: string
     description: string
-    featured_image: CosmicFile
-    display_order: number
+    image: {
+      imgix_url: string
+    }
+    products: Product[]
   }
 }
 
-export interface Review {
+export interface CartItem {
   id: string
   title: string
+  price: number
+  quantity: number
+  image: string
   slug: string
-  metadata: {
-    product: Product
-    customer_name: string
-    customer_email: string
-    rating: RatingOption
-    review_title: string
-    review_content: string
-    verified_purchase: boolean
-    review_date: string
-  }
+}
+
+export interface ContactFormData {
+  name: string
+  email: string
+  subject: string
+  message: string
 }
 
 export interface ContactPage {
@@ -71,20 +67,11 @@ export interface ContactPage {
 export interface ContactSubmission {
   id: string
   title: string
-  slug: string
   metadata: {
     name: string
     email: string
     subject: string
     message: string
-    submission_date: string
-    status: string
+    submitted_at: string
   }
-}
-
-export interface ContactFormData {
-  name: string
-  email: string
-  subject: string
-  message: string
 }

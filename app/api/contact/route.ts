@@ -1,14 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createContactSubmission } from '@/lib/cosmic'
-import { sendContactEmail } from '@/lib/resend'
-import { ContactFormData } from '@/lib/types'
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { name, email, subject, message }: ContactFormData = body
+    const { name, email, subject, message } = body
 
-    // Validate required fields
+    // Basic validation
     if (!name || !email || !subject || !message) {
       return NextResponse.json(
         { error: 'All fields are required' },
@@ -25,38 +23,20 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const formData: ContactFormData = {
-      name: name.trim(),
-      email: email.trim(),
-      subject: subject.trim(),
-      message: message.trim()
-    }
-
-    // Save to Cosmic CMS
-    const submission = await createContactSubmission(formData)
-
-    // Send email notification (only if Resend is configured)
-    try {
-      if (process.env.RESEND_API_KEY) {
-        await sendContactEmail(formData)
-      } else {
-        console.warn('RESEND_API_KEY not configured - email notification skipped')
-      }
-    } catch (emailError) {
-      console.error('Email sending failed:', emailError)
-      // Don't fail the entire request if email fails
-    }
+    // Create contact submission in Cosmic
+    await createContactSubmission({
+      name,
+      email,
+      subject,
+      message,
+    })
 
     return NextResponse.json(
-      { 
-        message: 'Contact form submitted successfully',
-        submissionId: submission.id
-      },
-      { status: 200 }
+      { message: 'Contact submission created successfully' },
+      { status: 201 }
     )
   } catch (error) {
-    console.error('Contact form submission error:', error)
-    
+    console.error('Error creating contact submission:', error)
     return NextResponse.json(
       { error: 'Failed to submit contact form' },
       { status: 500 }
