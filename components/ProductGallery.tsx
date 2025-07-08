@@ -4,8 +4,8 @@ import { useState } from 'react'
 import { CosmicFile } from '@/lib/types'
 
 interface ProductGalleryProps {
-  featuredImage: CosmicFile
-  gallery: CosmicFile[]
+  featuredImage?: CosmicFile
+  gallery?: CosmicFile[]
   productName: string
 }
 
@@ -16,7 +16,9 @@ export default function ProductGallery({
 }: ProductGalleryProps) {
   const [currentImage, setCurrentImage] = useState(0)
   
-  const allImages = [featuredImage, ...(gallery || [])]
+  const allImages = []
+  if (featuredImage) allImages.push(featuredImage)
+  if (gallery) allImages.push(...gallery)
   
   const currentImageUrl = allImages[currentImage]?.imgix_url
     ? `${allImages[currentImage].imgix_url}?w=600&h=600&fit=crop&auto=format,compress`

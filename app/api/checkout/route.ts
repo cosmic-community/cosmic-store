@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { stripe, formatAmountForStripe } from '@/lib/stripe'
-import { CartItem } from '@/contexts/CartContext'
+import { CartItem } from '@/lib/types'
 
 export async function POST(request: NextRequest) {
   try {

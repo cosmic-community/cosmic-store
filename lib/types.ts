@@ -1,23 +1,24 @@
+export interface CosmicFile {
+  url: string
+  imgix_url: string
+  name?: string
+}
+
 export interface Product {
   id: string
   title: string
   slug: string
   metadata: {
+    name: string
     description: string
     price: number
-    images: Array<{
-      imgix_url: string
-      name: string
-    }>
-    category: string
-    in_stock: boolean
     sku: string
-    weight?: number
-    dimensions?: {
-      length: number
-      width: number
-      height: number
-    }
+    inventory_count: number
+    featured_image: CosmicFile
+    product_gallery: CosmicFile[]
+    collections: Collection[]
+    in_stock: boolean
+    featured_product: boolean
   }
 }
 
@@ -26,21 +27,36 @@ export interface Collection {
   title: string
   slug: string
   metadata: {
+    name: string
     description: string
-    image: {
-      imgix_url: string
+    featured_image: CosmicFile
+    display_order: number
+  }
+}
+
+export interface Review {
+  id: string
+  title: string
+  slug: string
+  metadata: {
+    product: Product
+    customer_name: string
+    customer_email: string
+    rating: {
+      key: string
+      value: string
     }
-    products: Product[]
+    review_title: string
+    review_content: string
+    verified_purchase: boolean
+    review_date: string
   }
 }
 
 export interface CartItem {
   id: string
-  title: string
-  price: number
+  product: Product
   quantity: number
-  image: string
-  slug: string
 }
 
 export interface ContactFormData {
