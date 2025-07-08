@@ -30,8 +30,12 @@ export default function CheckoutPage() {
 
       const session = await createCheckoutSession(items, successUrl, cancelUrl)
       
-      // Redirect to Stripe Checkout
-      window.location.href = session.url
+      // Redirect to Stripe Checkout with null check
+      if (session.url) {
+        window.location.href = session.url
+      } else {
+        throw new Error('No checkout URL received from Stripe')
+      }
     } catch (err) {
       console.error('Checkout error:', err)
       setError('Failed to process checkout. Please try again.')
