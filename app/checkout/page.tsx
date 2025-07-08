@@ -38,7 +38,7 @@ export default function CheckoutPage() {
       }
     } catch (err) {
       console.error('Checkout error:', err)
-      setError('Failed to process checkout. Please try again.')
+      setError(err instanceof Error ? err.message : 'Failed to process checkout. Please try again.')
     } finally {
       setIsLoading(false)
     }
