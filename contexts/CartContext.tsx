@@ -195,4 +195,4 @@ export function useCart(): CartContextType {
   return context;
 }
 
-export { CartItem };
+export type { CartItem };
