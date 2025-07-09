@@ -1,17 +1,17 @@
-import { getAllProducts, getAllCollections } from '@/lib/cosmic'
-import ProductCard from '@/components/ProductCard'
-import CollectionCard from '@/components/CollectionCard'
-import { Product, Collection } from '@/lib/types'
+import { getProducts, getCollections } from '@/lib/cosmic';
+import ProductCard from '@/components/ProductCard';
+import CollectionCard from '@/components/CollectionCard';
+import { Product, Collection } from '@/lib/types';
 
 export default async function HomePage() {
   const [products, collections] = await Promise.all([
-    getAllProducts(),
-    getAllCollections()
-  ])
+    getProducts(),
+    getCollections()
+  ]);
 
   const featuredProducts = products.filter((product: Product) => 
     product.metadata.featured_product === true
-  )
+  );
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -55,5 +55,5 @@ export default async function HomePage() {
         </div>
       </section>
     </div>
-  )
+  );
 }

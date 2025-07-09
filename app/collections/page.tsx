@@ -1,9 +1,9 @@
-import { getAllCollections } from '@/lib/cosmic'
-import CollectionCard from '@/components/CollectionCard'
-import { Collection } from '@/lib/types'
+import { getCollections } from '@/lib/cosmic';
+import CollectionCard from '@/components/CollectionCard';
+import { Collection } from '@/lib/types';
 
 export default async function CollectionsPage() {
-  const collections = await getAllCollections()
+  const collections = await getCollections();
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -18,5 +18,5 @@ export default async function CollectionsPage() {
         ))}
       </div>
     </div>
-  )
+  );
 }

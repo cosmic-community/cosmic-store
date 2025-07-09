@@ -8,14 +8,8 @@ export interface Product {
     price: number;
     sku: string;
     inventory_count: number;
-    featured_image?: {
-      url: string;
-      imgix_url: string;
-    };
-    product_gallery?: Array<{
-      url: string;
-      imgix_url: string;
-    }>;
+    featured_image?: CosmicFile;
+    product_gallery?: CosmicFile[];
     collections?: Collection[];
     in_stock: boolean;
     featured_product: boolean;
@@ -29,10 +23,7 @@ export interface Collection {
   metadata: {
     name: string;
     description: string;
-    featured_image?: {
-      url: string;
-      imgix_url: string;
-    };
+    featured_image?: CosmicFile;
     display_order: number;
   };
 }
@@ -83,8 +74,23 @@ export interface Page {
   };
 }
 
-export interface CartItem extends Product {
+export interface CosmicFile {
+  url: string;
+  imgix_url: string;
+}
+
+export interface CartItem {
+  id: string;
+  product: Product;
   quantity: number;
+  price: number;
+}
+
+export interface ContactFormData {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
 }
 
 export interface CosmicError {

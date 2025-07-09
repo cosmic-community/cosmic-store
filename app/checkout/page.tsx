@@ -1,48 +1,49 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { useCart } from '@/hooks/useCart'
-import { createCheckoutSession } from '@/lib/cart'
-import { Loader2 } from 'lucide-react'
-import Link from 'next/link'
+import { useState, useEffect } from 'react';
+import { useCart } from '@/hooks/useCart';
+import { createCheckoutSession } from '@/lib/cart';
+import { Loader2 } from 'lucide-react';
+import Link from 'next/link';
+import { CartItem } from '@/lib/types';
 
 export default function CheckoutPage() {
-  const { items, total, itemCount, clearCart } = useCart()
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const { items, total, itemCount, clearCart } = useCart();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     // Redirect if cart is empty
     if (items.length === 0) {
-      window.location.href = '/cart'
+      window.location.href = '/cart';
     }
-  }, [items])
+  }, [items]);
 
   const handleCheckout = async () => {
-    if (items.length === 0) return
+    if (items.length === 0) return;
 
-    setIsLoading(true)
-    setError(null)
+    setIsLoading(true);
+    setError(null);
 
     try {
-      const successUrl = `${window.location.origin}/checkout/success`
-      const cancelUrl = `${window.location.origin}/cart`
+      const successUrl = `${window.location.origin}/checkout/success`;
+      const cancelUrl = `${window.location.origin}/cart`;
 
-      const session = await createCheckoutSession(items, successUrl, cancelUrl)
+      const session = await createCheckoutSession(items, successUrl, cancelUrl);
       
       // Redirect to Stripe Checkout with null check
       if (session.url) {
-        window.location.href = session.url
+        window.location.href = session.url;
       } else {
-        throw new Error('No checkout URL received from Stripe')
+        throw new Error('No checkout URL received from Stripe');
       }
     } catch (err) {
-      console.error('Checkout error:', err)
-      setError(err instanceof Error ? err.message : 'Failed to process checkout. Please try again.')
+      console.error('Checkout error:', err);
+      setError(err instanceof Error ? err.message : 'Failed to process checkout. Please try again.');
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   if (items.length === 0) {
     return (
@@ -62,7 +63,7 @@ export default function CheckoutPage() {
           </Link>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -80,8 +81,8 @@ export default function CheckoutPage() {
           
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
             <div className="space-y-4 mb-6">
-              {items.map((item) => (
-                <div key={item.id} className="flex gap-4">
+              {items.map((item: CartItem) => (
+                <div key={item.product.id} className="flex gap-4">
                   <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
                     <img
                       src={item.product.metadata.featured_image?.imgix_url 
@@ -164,5 +165,5 @@ export default function CheckoutPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

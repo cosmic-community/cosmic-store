@@ -1,4 +1,4 @@
-import { CartItem } from '@/contexts/CartContext'
+import { CartItem } from '@/lib/types';
 
 export async function createCheckoutSession(
   items: CartItem[],
@@ -15,16 +15,16 @@ export async function createCheckoutSession(
       successUrl,
       cancelUrl
     })
-  })
+  });
 
   if (!response.ok) {
-    const error = await response.json()
-    throw new Error(error.error || 'Failed to create checkout session')
+    const error = await response.json();
+    throw new Error(error.error || 'Failed to create checkout session');
   }
 
-  const data = await response.json()
+  const data = await response.json();
   return {
     id: data.sessionId,
     url: data.url
-  }
+  };
 }

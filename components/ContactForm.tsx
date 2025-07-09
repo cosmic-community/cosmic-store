@@ -1,12 +1,12 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { ContactFormData } from '@/lib/types'
+import { useState } from 'react';
+import { ContactFormData } from '@/lib/types';
 
 interface ContactFormProps {
-  formTitle: string
-  formDescription?: string
-  successMessage: string
+  formTitle: string;
+  formDescription?: string;
+  successMessage: string;
 }
 
 export default function ContactForm({ formTitle, formDescription, successMessage }: ContactFormProps) {
@@ -15,20 +15,20 @@ export default function ContactForm({ formTitle, formDescription, successMessage
     email: '',
     subject: '',
     message: ''
-  })
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isSuccess, setIsSuccess] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setFormData(prev => ({ ...prev, [name]: value }))
-  }
+    const { name, value } = e.target;
+    setFormData((prev: ContactFormData) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-    setError(null)
+    e.preventDefault();
+    setIsSubmitting(true);
+    setError(null);
 
     try {
       const response = await fetch('/api/contact', {
@@ -37,20 +37,20 @@ export default function ContactForm({ formTitle, formDescription, successMessage
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
-      })
+      });
 
       if (!response.ok) {
-        throw new Error('Failed to send message')
+        throw new Error('Failed to send message');
       }
 
-      setIsSuccess(true)
-      setFormData({ name: '', email: '', subject: '', message: '' })
+      setIsSuccess(true);
+      setFormData({ name: '', email: '', subject: '', message: '' });
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to send message')
+      setError(err instanceof Error ? err.message : 'Failed to send message');
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   if (isSuccess) {
     return (
@@ -69,7 +69,7 @@ export default function ContactForm({ formTitle, formDescription, successMessage
           Send another message
         </button>
       </div>
-    )
+    );
   }
 
   return (
@@ -166,5 +166,5 @@ export default function ContactForm({ formTitle, formDescription, successMessage
         </button>
       </form>
     </div>
-  )
+  );
 }

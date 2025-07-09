@@ -1,9 +1,9 @@
-import { getAllProducts } from '@/lib/cosmic'
-import ProductCard from '@/components/ProductCard'
-import { Product } from '@/lib/types'
+import { getProducts } from '@/lib/cosmic';
+import ProductCard from '@/components/ProductCard';
+import { Product } from '@/lib/types';
 
 export default async function ProductsPage() {
-  const products = await getAllProducts()
+  const products = await getProducts();
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -18,5 +18,5 @@ export default async function ProductsPage() {
         ))}
       </div>
     </div>
-  )
+  );
 }

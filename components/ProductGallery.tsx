@@ -1,12 +1,12 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { CosmicFile } from '@/lib/types'
+import { useState } from 'react';
+import { CosmicFile } from '@/lib/types';
 
 interface ProductGalleryProps {
-  featuredImage?: CosmicFile
-  gallery?: CosmicFile[]
-  productName: string
+  featuredImage?: CosmicFile;
+  gallery?: CosmicFile[];
+  productName: string;
 }
 
 export default function ProductGallery({ 
@@ -14,15 +14,15 @@ export default function ProductGallery({
   gallery, 
   productName 
 }: ProductGalleryProps) {
-  const [currentImage, setCurrentImage] = useState(0)
+  const [currentImage, setCurrentImage] = useState(0);
   
-  const allImages = []
-  if (featuredImage) allImages.push(featuredImage)
-  if (gallery) allImages.push(...gallery)
+  const allImages = [];
+  if (featuredImage) allImages.push(featuredImage);
+  if (gallery) allImages.push(...gallery);
   
   const currentImageUrl = allImages[currentImage]?.imgix_url
     ? `${allImages[currentImage].imgix_url}?w=600&h=600&fit=crop&auto=format,compress`
-    : '/placeholder-product.jpg'
+    : '/placeholder-product.jpg';
 
   return (
     <div className="space-y-4">
@@ -58,5 +58,5 @@ export default function ProductGallery({
         </div>
       )}
     </div>
-  )
+  );
 }

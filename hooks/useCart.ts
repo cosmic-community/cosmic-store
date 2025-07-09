@@ -1,48 +1,51 @@
-import { useCart as useCartContext } from '@/contexts/CartContext'
-import { Product } from '@/lib/types'
+import { useCart as useCartContext } from '@/contexts/CartContext';
+import { Product, CartItem } from '@/lib/types';
 
 export const useCart = () => {
-  const { state, dispatch } = useCartContext()
+  const context = useCartContext();
 
-  const addToCart = (product: Product) => {
-    dispatch({ type: 'ADD_TO_CART', product })
-  }
+  const addToCart = (product: Product, quantity = 1) => {
+    context.addItem(product, quantity);
+  };
 
   const removeFromCart = (productId: string) => {
-    dispatch({ type: 'REMOVE_FROM_CART', productId })
-  }
+    context.removeItem(productId);
+  };
 
   const updateQuantity = (productId: string, quantity: number) => {
-    dispatch({ type: 'UPDATE_QUANTITY', productId, quantity })
-  }
+    context.updateQuantity(productId, quantity);
+  };
 
   const clearCart = () => {
-    dispatch({ type: 'CLEAR_CART' })
-  }
+    context.clearCart();
+  };
 
   const toggleCart = () => {
-    dispatch({ type: 'TOGGLE_CART' })
-  }
+    context.toggleCart();
+  };
 
   const openCart = () => {
-    dispatch({ type: 'OPEN_CART' })
-  }
+    context.openCart();
+  };
 
   const closeCart = () => {
-    dispatch({ type: 'CLOSE_CART' })
-  }
+    context.closeCart();
+  };
 
-  const isProductInCart = (productId: string) => {
-    return state.items.some(item => item.product.id === productId)
-  }
+  const isProductInCart = (productId: string): boolean => {
+    return context.items.some((item: CartItem) => item.product.id === productId);
+  };
 
-  const getProductQuantity = (productId: string) => {
-    const item = state.items.find(item => item.product.id === productId)
-    return item?.quantity || 0
-  }
+  const getProductQuantity = (productId: string): number => {
+    const item = context.items.find((item: CartItem) => item.product.id === productId);
+    return item?.quantity || 0;
+  };
 
   return {
-    ...state,
+    items: context.items,
+    isOpen: context.isOpen,
+    total: context.total,
+    itemCount: context.itemCount,
     addToCart,
     removeFromCart,
     updateQuantity,
@@ -51,6 +54,6 @@ export const useCart = () => {
     openCart,
     closeCart,
     isProductInCart,
-    getProductQuantity
-  }
-}
+    getProductQuantity,
+  };
+};

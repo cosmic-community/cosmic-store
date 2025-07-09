@@ -32,6 +32,9 @@ export async function getProducts(limit = 100): Promise<Product[]> {
   }
 }
 
+// Alias for backward compatibility
+export const getAllProducts = getProducts;
+
 export async function getProductBySlug(slug: string): Promise<Product | null> {
   try {
     const response = await cosmic.objects
@@ -74,6 +77,9 @@ export async function getCollections(): Promise<Collection[]> {
     return [];
   }
 }
+
+// Alias for backward compatibility
+export const getAllCollections = getCollections;
 
 export async function getCollectionBySlug(slug: string): Promise<Collection | null> {
   try {
@@ -173,4 +179,9 @@ export async function getPageBySlug(slug: string): Promise<Page | null> {
     console.error('Error fetching page:', error);
     return null;
   }
+}
+
+// Contact page specifically
+export async function getContactPage(): Promise<Page | null> {
+  return getPageBySlug('contact');
 }

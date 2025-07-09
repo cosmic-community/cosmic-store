@@ -1,11 +1,12 @@
-'use client'
+'use client';
 
-import { useCart } from '@/hooks/useCart'
-import { Plus, Minus, Trash2 } from 'lucide-react'
-import Link from 'next/link'
+import { useCart } from '@/hooks/useCart';
+import { Plus, Minus, Trash2 } from 'lucide-react';
+import Link from 'next/link';
+import { CartItem } from '@/lib/types';
 
 export default function CartPage() {
-  const { items, total, itemCount, updateQuantity, removeFromCart } = useCart()
+  const { items, total, itemCount, updateQuantity, removeFromCart } = useCart();
 
   if (items.length === 0) {
     return (
@@ -25,7 +26,7 @@ export default function CartPage() {
           </Link>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -38,8 +39,8 @@ export default function CartPage() {
         {/* Cart Items */}
         <div className="lg:col-span-2">
           <div className="space-y-4">
-            {items.map((item) => (
-              <div key={item.id} className="flex gap-4 p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+            {items.map((item: CartItem) => (
+              <div key={item.product.id} className="flex gap-4 p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
                 <div className="w-24 h-24 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
                   <img
                     src={item.product.metadata.featured_image?.imgix_url 
@@ -147,5 +148,5 @@ export default function CartPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

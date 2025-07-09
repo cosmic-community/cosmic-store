@@ -1,14 +1,14 @@
-import { getContactPage } from '@/lib/cosmic'
-import ContactForm from '@/components/ContactForm'
-import { Metadata } from 'next'
+import { getContactPage } from '@/lib/cosmic';
+import ContactForm from '@/components/ContactForm';
+import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Contact Us - Cosmic Store',
   description: 'Get in touch with our team for questions, support, or feedback.',
-}
+};
 
 export default async function ContactPage() {
-  const contactPage = await getContactPage()
+  const contactPage = await getContactPage();
 
   if (!contactPage) {
     return (
@@ -21,13 +21,18 @@ export default async function ContactPage() {
             <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
               We'd love to hear from you! Please fill out the form below and we'll get back to you soon.
             </p>
+            <ContactForm
+              formTitle="Get in Touch"
+              formDescription="We'd love to hear from you! Please fill out the form below and we'll get back to you soon."
+              successMessage="Thank you for your message! We'll get back to you soon."
+            />
           </div>
         </div>
       </div>
-    )
+    );
   }
 
-  const { metadata } = contactPage
+  const { metadata } = contactPage;
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
@@ -52,7 +57,7 @@ export default async function ContactPage() {
                 </h2>
                 <div 
                   className="prose prose-gray dark:prose-invert max-w-none"
-                  dangerouslySetInnerHTML={{ __html: metadata.contact_info }}
+                  dangerouslySetInnerHTML={{ __html: metadata.contact_info || '' }}
                 />
               </div>
             </div>
@@ -69,5 +74,5 @@ export default async function ContactPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

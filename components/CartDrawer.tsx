@@ -1,9 +1,10 @@
-'use client'
+'use client';
 
-import { Fragment } from 'react'
-import { useCart } from '@/hooks/useCart'
-import { X, Plus, Minus, Trash2 } from 'lucide-react'
-import Link from 'next/link'
+import { Fragment } from 'react';
+import { useCart } from '@/hooks/useCart';
+import { X, Plus, Minus, Trash2 } from 'lucide-react';
+import Link from 'next/link';
+import { CartItem } from '@/lib/types';
 
 export default function CartDrawer() {
   const { 
@@ -14,9 +15,9 @@ export default function CartDrawer() {
     closeCart, 
     updateQuantity, 
     removeFromCart 
-  } = useCart()
+  } = useCart();
 
-  if (!isOpen) return null
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden">
@@ -57,8 +58,8 @@ export default function CartDrawer() {
               </div>
             ) : (
               <div className="space-y-4">
-                {items.map((item) => (
-                  <div key={item.id} className="flex gap-4 p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+                {items.map((item: CartItem) => (
+                  <div key={item.product.id} className="flex gap-4 p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
                     <div className="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden">
                       <img
                         src={item.product.metadata.featured_image?.imgix_url 
@@ -139,5 +140,5 @@ export default function CartDrawer() {
         </div>
       </div>
     </div>
-  )
+  );
 }
