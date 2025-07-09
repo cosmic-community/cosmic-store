@@ -1,155 +1,147 @@
-import { createBucketClient } from '@cosmicjs/sdk'
-import { Product, Collection, Review, ContactPage } from './types'
+import { createBucketClient } from '@cosmicjs/sdk';
+import { Product, Collection, Review, ContactSubmission, Page, CosmicError, CosmicResponse, CosmicSingleResponse } from './types';
 
+// Create bucket client
 const cosmic = createBucketClient({
   bucketSlug: process.env.COSMIC_BUCKET_SLUG || '',
   readKey: process.env.COSMIC_READ_KEY || '',
   writeKey: process.env.COSMIC_WRITE_KEY || '',
-  apiEnvironment: "staging",
-})
+});
 
-export async function getProducts(): Promise<Product[]> {
+// Helper function to handle Cosmic API errors
+function handleCosmicError(error: any): CosmicError {
+  if (error.status === 404) {
+    return { message: 'Resource not found', status: 404 };
+  }
+  return { message: error.message || 'An error occurred', status: error.status || 500 };
+}
+
+// Products
+export async function getProducts(limit = 100): Promise<Product[]> {
   try {
-    const { objects } = await cosmic.objects
+    const response = await cosmic.objects
       .find({ type: 'products' })
       .props(['id', 'title', 'slug', 'metadata'])
       .depth(1)
-
-    return objects || []
+      .limit(limit);
+    
+    return response.objects as Product[];
   } catch (error) {
-    console.error('Error fetching products:', error)
-    return []
-  }
-}
-
-export async function getAllProducts(): Promise<Product[]> {
-  return getProducts()
-}
-
-export async function getProduct(slug: string): Promise<Product | null> {
-  try {
-    const { object } = await cosmic.objects
-      .findOne({ type: 'products', slug })
-      .props(['id', 'title', 'slug', 'metadata'])
-      .depth(1)
-
-    return object || null
-  } catch (error) {
-    console.error('Error fetching product:', error)
-    return null
+    console.error('Error fetching products:', error);
+    return [];
   }
 }
 
 export async function getProductBySlug(slug: string): Promise<Product | null> {
-  return getProduct(slug)
-}
-
-export async function getCollections(): Promise<Collection[]> {
   try {
-    const { objects } = await cosmic.objects
-      .find({ type: 'collections' })
+    const response = await cosmic.objects
+      .findOne({ type: 'products', slug })
       .props(['id', 'title', 'slug', 'metadata'])
-      .depth(1)
-
-    return objects || []
+      .depth(1);
+    
+    return response.object as Product;
   } catch (error) {
-    console.error('Error fetching collections:', error)
-    return []
+    console.error('Error fetching product:', error);
+    return null;
   }
 }
 
-export async function getAllCollections(): Promise<Collection[]> {
-  return getCollections()
+export async function getFeaturedProducts(): Promise<Product[]> {
+  try {
+    const response = await cosmic.objects
+      .find({ type: 'products', 'metadata.featured_product': true })
+      .props(['id', 'title', 'slug', 'metadata'])
+      .depth(1);
+    
+    return response.objects as Product[];
+  } catch (error) {
+    console.error('Error fetching featured products:', error);
+    return [];
+  }
 }
 
-export async function getCollection(slug: string): Promise<Collection | null> {
+// Collections
+export async function getCollections(): Promise<Collection[]> {
   try {
-    const { object } = await cosmic.objects
-      .findOne({ type: 'collections', slug })
+    const response = await cosmic.objects
+      .find({ type: 'collections' })
       .props(['id', 'title', 'slug', 'metadata'])
-      .depth(1)
-
-    return object || null
+      .depth(1);
+    
+    return response.objects as Collection[];
   } catch (error) {
-    console.error('Error fetching collection:', error)
-    return null
+    console.error('Error fetching collections:', error);
+    return [];
   }
 }
 
 export async function getCollectionBySlug(slug: string): Promise<Collection | null> {
-  return getCollection(slug)
+  try {
+    const response = await cosmic.objects
+      .findOne({ type: 'collections', slug })
+      .props(['id', 'title', 'slug', 'metadata'])
+      .depth(1);
+    
+    return response.object as Collection;
+  } catch (error) {
+    console.error('Error fetching collection:', error);
+    return null;
+  }
 }
 
 export async function getProductsByCollection(collectionId: string): Promise<Product[]> {
   try {
-    const { objects } = await cosmic.objects
-      .find({ 
-        type: 'products',
-        'metadata.collections': collectionId
-      })
+    const response = await cosmic.objects
+      .find({ type: 'products', 'metadata.collections': collectionId })
       .props(['id', 'title', 'slug', 'metadata'])
-      .depth(1)
-
-    return objects || []
+      .depth(1);
+    
+    return response.objects as Product[];
   } catch (error) {
-    console.error('Error fetching products by collection:', error)
-    return []
+    console.error('Error fetching products by collection:', error);
+    return [];
   }
 }
 
-export async function getReviews(): Promise<Review[]> {
+// Reviews
+export async function getReviews(limit = 100): Promise<Review[]> {
   try {
-    const { objects } = await cosmic.objects
+    const response = await cosmic.objects
       .find({ type: 'reviews' })
       .props(['id', 'title', 'slug', 'metadata'])
       .depth(1)
-
-    return objects || []
+      .limit(limit);
+    
+    return response.objects as Review[];
   } catch (error) {
-    console.error('Error fetching reviews:', error)
-    return []
+    console.error('Error fetching reviews:', error);
+    return [];
   }
 }
 
 export async function getReviewsByProduct(productId: string): Promise<Review[]> {
   try {
-    const { objects } = await cosmic.objects
-      .find({ 
-        type: 'reviews',
-        'metadata.product': productId
-      })
+    const response = await cosmic.objects
+      .find({ type: 'reviews', 'metadata.product': productId })
       .props(['id', 'title', 'slug', 'metadata'])
-      .depth(1)
-
-    return objects || []
+      .depth(1);
+    
+    return response.objects as Review[];
   } catch (error) {
-    console.error('Error fetching reviews by product:', error)
-    return []
+    console.error('Error fetching reviews by product:', error);
+    return [];
   }
 }
 
-export async function getContactPage(): Promise<ContactPage | null> {
-  try {
-    const { object } = await cosmic.objects
-      .findOne({ type: 'pages', slug: 'contact' })
-      .props(['id', 'title', 'slug', 'metadata'])
-      .depth(1)
-
-    return object || null
-  } catch (error) {
-    console.error('Error fetching contact page:', error)
-    return null
-  }
-}
-
+// Contact
 export async function createContactSubmission(data: {
-  name: string
-  email: string
-  subject: string
-  message: string
-}) {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+}): Promise<ContactSubmission | null> {
   try {
-    const { object } = await cosmic.objects.insertOne({
+    const response = await cosmic.objects.insertOne({
       title: `Contact from ${data.name}`,
       type: 'contact-submissions',
       metadata: {
@@ -159,11 +151,26 @@ export async function createContactSubmission(data: {
         message: data.message,
         submitted_at: new Date().toISOString(),
       },
-    })
-
-    return object
+    });
+    
+    return response.object as ContactSubmission;
   } catch (error) {
-    console.error('Error creating contact submission:', error)
-    throw error
+    console.error('Error creating contact submission:', error);
+    return null;
+  }
+}
+
+// Pages
+export async function getPageBySlug(slug: string): Promise<Page | null> {
+  try {
+    const response = await cosmic.objects
+      .findOne({ type: 'pages', slug })
+      .props(['id', 'title', 'slug', 'metadata'])
+      .depth(1);
+    
+    return response.object as Page;
+  } catch (error) {
+    console.error('Error fetching page:', error);
+    return null;
   }
 }
